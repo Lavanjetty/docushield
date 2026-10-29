@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+venv/
+env/
+ENV/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Database / uploads (keep sample data, ignore runtime temp uploads if any)
+backend/uploads/*.pdf
+backend/uploads/*.png
+backend/uploads/*.jpg
+!sample_data/*
