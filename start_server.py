@@ -1,6 +1,7 @@
 """
 DocuShield Startup Runner
-Launches the FastAPI backend and serves the interactive dashboard on http://127.0.0.1:8000
+Launches the FastAPI backend and serves the interactive dashboard.
+Compatible with local development and cloud platforms like Render.
 """
 import sys
 import os
@@ -17,6 +18,9 @@ import app
 import uvicorn
 
 def main():
+    port = int(os.environ.get("PORT", 8000))
+    host = os.environ.get("HOST", "0.0.0.0")
+
     print("=" * 70)
     print("🛡️  DOCUSHIELD: INTELLIGENT DOCUMENT FORGERY DETECTION & VERIFICATION")
     print("   Authors: Vignesh S • Sudharshan • Lavan Kumar")
@@ -28,15 +32,18 @@ def main():
     
     # Ensure samples are generated
     sample_dir = os.path.join(BASE_DIR, "sample_data")
-    samples_generator.generate_all_samples(sample_dir)
+    try:
+        samples_generator.generate_all_samples(sample_dir)
+    except Exception as e:
+        print(f"Sample generation note: {e}")
 
-    print("\n🚀 Starting DocuShield Application Server...")
-    print("👉 Dashboard URL : http://127.0.0.1:8000")
-    print("👉 Swagger Docs  : http://127.0.0.1:8000/docs")
-    print("👉 Health API    : http://127.0.0.1:8000/api/health")
+    print(f"\n🚀 Starting DocuShield Application Server on {host}:{port}...")
+    print(f"👉 Local Dashboard URL : http://127.0.0.1:{port}")
+    print(f"👉 Swagger Docs API    : http://127.0.0.1:{port}/docs")
+    print(f"👉 Health Check API    : http://127.0.0.1:{port}/api/health")
     print("\nPress Ctrl+C to stop the server.\n")
 
-    uvicorn.run(app.app, host="127.0.0.1", port=8000, reload=False)
+    uvicorn.run(app.app, host=host, port=port, reload=False)
 
 if __name__ == "__main__":
     main()
